@@ -27,8 +27,6 @@ const getIcon = index => {
     return iconsMap[index];
 }
 
-
-
 let busy = [];
 
 setInterval(() => {
