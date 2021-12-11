@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       REGISTRY: ghcr.io
+      IMAGE_NAME: nkirchhoffer/aperabot
     permissions:
       contents: read
       packages: write
@@ -26,7 +27,7 @@ jobs:
       id: meta
       uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
       with:
-        images: ${{ env.REGISTRY }}/aperabot
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
     - name: Build et push de l'image Docker
       uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
       with:
