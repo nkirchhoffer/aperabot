@@ -8,6 +8,11 @@ jobs:
   build-push:
     name: Publier l'image sur le registre GitHub
     runs-on: ubuntu-latest
+    env:
+      REGISTRY: ghcr.io
+    permissions:
+      contents: read
+      packages: write
     steps:
     - name: Récupération du contenu du dépôt
       uses: actions/checkout@v2
