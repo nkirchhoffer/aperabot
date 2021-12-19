@@ -12,37 +12,19 @@ client.on('ready', () => {
 
 });
 
-const getIcon = index => {
-    let icon;
-
-    switch (index) {
-        case 1:
-            icon = '1️⃣';
-            break;
-        case 2:
-            icon = '2️⃣';
-            break;
-        case 3:
-            icon = '3️⃣';
-            break;
-        case 4:
-            icon = '4️⃣'
-            break;
-        case 5:
-            icon = '5️⃣';
-            break;
-        case 6:
-            icon = '6️⃣';
-            break;
-        case 7:
-            icon = '7️⃣';
-            break;
-        case 8:
-            icon = '8️⃣'
-            break;
+const getIcon = index => {   
+    const iconsMap = {
+        1: '1️⃣',
+        2: '2️⃣',
+        3: '3️⃣',
+        4: '4️⃣',
+        5: '5️⃣',
+        6: '6️⃣',
+        7: '7️⃣',
+        8: '8️⃣'
     }
 
-    return icon;
+    return iconsMap[index];
 }
 
 let busy = [];
@@ -56,7 +38,7 @@ setInterval(() => {
             'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
         },
 
-        data: 'action=READ_LIST_STATUS&serial_centrale=65e4444c3471550a789e2138a9e28eff'
+        data: `action=READ_LIST_STATUS&serial_centrale=${process.env.CENTRALE_SERIAL}`
     }).then(res => {
         const data = res.data;
         const machines = data.machine_info_status.machine_list;
@@ -87,17 +69,17 @@ setInterval(() => {
             i++;
         });
 
-
-        message += `\n\n *(dernier edit : ${moment().format('LLLL')})*`;
-        client.guilds.fetch('748417085083877387').then(guild => {
-            const channel = guild.channels.cache.get('851742655867781130');
-            channel.messages.fetch('851750491692204033').then(msg => {
+        const lastEdited = moment().format('LLLL');
+        message += `\n\n *(dernier edit : ${lastEdited})*`;
+        client.guilds.fetch(process.env.DISCORD_GUILD_ID).then(guild => {
+            const channel = guild.channels.cache.get(process.env.DISCORD_CHANNEL_ID);
+            channel.messages.fetch(process.env.DISCORD_MESSAGE_ID).then(msg => {
                 msg.edit(message).then(() => {
-                    console.log('Message édité!');
+                    console.log(`Message édité : ${lastEdited} !`);
                 }).catch(console.error);
             });
         });
     });
 }, 10000);
 
-client.login(process.env.TOKEN);
+client.login(process.env.DISCORD_OAUTH_TOKEN);
